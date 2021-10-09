@@ -116,7 +116,7 @@ AI 管理脚本。AI 以 `<tag>: <token>` 的形式存储在 ~/.saiblo-dev-tools
   ```
 
 - ```shell
-  -u, --upload <config_path> <game_path>
+  -u, --upload <config_path>
   ```
 
   上传游戏逻辑至 Saiblo. `<config_path>` 为配置文件的路径，格式如下：
