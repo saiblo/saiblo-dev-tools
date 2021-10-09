@@ -43,11 +43,11 @@ def _rename(old_tag: str, new_tag: str) -> None:
     write_db(db)
 
 
-def _upload(config_path: str, ai_path: str) -> None:
+def _upload(config_path: str) -> None:
     url = read_config()['url']
     cookie = read_cookie()
     config = json.load(open_file(config_path, encoding='utf-8'))
-    ai = {'ai': open_file(ai_path, 'rb')}
+    ai = {'ai': open_file(config['path'], 'rb')}
     response = requests.post(f'{url}/admin/game/{config["game"]}/ai/', cookies={'sessionid': cookie},
                              data={'language': config['language']}, files=ai)
     if response.status_code != 200:
@@ -63,7 +63,7 @@ def subcommand_hook(parser: ArgumentParser) -> None:
     group.add_argument('-i', '--insert', nargs=2, help='添加 AI', metavar=('tag', 'token'))
     group.add_argument('-d', '--delete', help='删除 AI', metavar='tag')
     group.add_argument('-r', '--rename', nargs=2, help='重命名 AI', metavar=('old_tag', 'new_tag'))
-    group.add_argument('-u', '--upload', nargs=2, help='上传 AI', metavar=('config_path', 'ai_path'))
+    group.add_argument('-u', '--upload', help='上传 AI', metavar='config_path')
 
 
 def main(args: Namespace) -> None:
@@ -76,6 +76,6 @@ def main(args: Namespace) -> None:
     elif args.rename is not None:
         _rename(*args.rename)
     elif args.upload is not None:
-        _upload(*args.upload)
+        _upload(args.upload)
     else:
         raise RuntimeError(f'无法识别参数：`{args}`')

@@ -80,15 +80,16 @@ AI 管理脚本。AI 以 `<tag>: <token>` 的形式存储在 ~/.saiblo-dev-tools
   将名为 `<old_tag>` 的 AI 更名为 `<new_tag>`. 若 `<new_tag>` 已存在，则会覆盖，但会将原有 AI 的 token 打印出来。
 
 - ```shell
-  -u, --upload <config_path> <ai_path>
+  -u, --upload <config_path>
   ```
 
-  上传 AI 至 Saiblo，并将 token 添加进本地数据库。`<ai_path>` 为 AI 代码的路径，同 Saiblo 网页要求，需要按规范打包成单文件。`<config_path>` 为配置文件的路径，格式如下：
+  上传 AI 至 Saiblo，并将 token 添加进本地数据库。`<config_path>` 为配置文件的路径，格式如下：
 
   ```jsonc
   {
       "game": number,  // <game_id>
       "language": string,  // {c, cmake, cpp, make, python, python_zip}
+      "path": string,  // AI 代码的路径，需要打包成单文件
       "tag": string,  // <tag>
   }
   ```
@@ -105,21 +106,28 @@ AI 管理脚本。AI 以 `<tag>: <token>` 的形式存储在 ~/.saiblo-dev-tools
 
   ```jsonc
   {
-      "game": number,  // <game_id>
       "ai": [
           string,  // <tag>
           ...
       ],
-      "config": any  // 自定义配置信息，若无，可以填空字符串
+      "config": any,  // 自定义配置信息，若无，可以填空字符串
+      "game": number,  // <game_id>
   }
   ```
 
 - ```shell
-  -u, --upload <game_id> <game_path>
+  -u, --upload <config_path> <game_path>
   ```
 
-  上传游戏逻辑至 Saiblo. `<game_path>` 为游戏逻辑代码的路径，需要打包成单文件。
+  上传游戏逻辑至 Saiblo. `<config_path>` 为配置文件的路径，格式如下：
 
+  ```jsonc
+  {
+      "id": number,  // <game_id>
+      "path": string,  // 游戏逻辑的路径，需要打包成单文件
+  }
+  ```
+  
   **注意**：目前 Saiblo 对游戏逻辑代码的管理与 AI 不同，因此该命令会覆盖 Saiblo 上先前的游戏逻辑，请谨慎使用。
 
 ### login

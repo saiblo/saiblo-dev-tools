@@ -37,10 +37,12 @@ def _test(config_path: str, result_dir: str) -> None:
         stdout.write(f'{data["status"]}\n')
 
 
-def _upload(game_id: str, game_path: str) -> None:
+def _upload(config_path: str) -> None:
     url = read_config()['url']
     cookie = read_cookie()
-    game = open_file(game_path, 'rb')
+    config = json.load(open_file(config_path, encoding='utf-8'))
+    game = open_file(config['path'], 'rb')
+    game_id = config['id']
     response = requests.post(f'{url}/admin/game/{game_id}/upload/', cookies={'sessionid': cookie},
                              files={'file': game})
     if response.status_code != 200:
@@ -61,13 +63,13 @@ def _upload(game_id: str, game_path: str) -> None:
 def subcommand_hook(parser: ArgumentParser) -> None:
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('-t', '--test', nargs=2, help='测试游戏', metavar=('config_path', 'result_dir'))
-    group.add_argument('-u', '--upload', nargs=2, help='上传游戏', metavar=('game_id', 'game_path'))
+    group.add_argument('-u', '--upload', help='上传游戏', metavar='config_path')
 
 
 def main(args: Namespace) -> None:
     if args.test is not None:
         _test(*args.test)
     elif args.upload is not None:
-        _upload(*args.upload)
+        _upload(args.upload)
     else:
         raise RuntimeError(f'无法识别参数：`{args}`')
