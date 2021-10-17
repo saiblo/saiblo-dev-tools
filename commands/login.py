@@ -1,3 +1,4 @@
+import os
 from argparse import ArgumentParser, Namespace
 from getpass import getpass
 from sys import stdout
@@ -11,7 +12,7 @@ from utils.storage import read_config
 
 def _login(username: str) -> None:
     url = read_config()['url']
-    password = getpass()
+    password = getpass() if os.getenv('SAIBLO_PASSWORD') is None else os.getenv('SAIBLO_PASSWORD')
     response = requests.post(f'{url}/admin/script-login/', data={'username': username, 'password': password})
     if response.status_code != 200:
         request_failed(response)
