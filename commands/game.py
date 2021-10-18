@@ -1,3 +1,4 @@
+import base64
 import json
 from argparse import ArgumentParser, Namespace
 from sys import stderr, stdout
@@ -16,12 +17,27 @@ def _test(config_path: str, result_dir: str) -> None:
     config = json.load(open_file(config_path, encoding='utf-8'))
 
     def get_ai_from_tag(tag: str) -> str:
+        if tag == 'human':
+            return tag
         if tag not in db['ai']:
             raise RuntimeError(f'AI `{tag}` 不存在')
         return db['ai'][tag]
 
+    room_id = None
+    if 'human' in config['ai']:
+        response = requests.post(f'{url}/admin/game/{config["game"]}/create-room/', cookies={'sessionid': cookie},
+                                 json={'capacity': len(config['ai'])})
+        data = response.json()
+        room_id = data['room_id']
+        base_url = data['base_url']
+        for i, ai in enumerate(config['ai']):
+            if ai == 'human':
+                human_url = f'{base_url}/{room_id}/saiblo-dev-tools/{i}'
+                stdout.write(f'Token of seat <{i}>: {str(base64.b64encode(human_url.encode("utf-8")), "utf-8")}\n')
+
     response = requests.post(f'{url}/admin/game/{config["game"]}/test/', cookies={'sessionid': cookie},
                              json={'ai': [get_ai_from_tag(tag) for tag in config['ai']],
+                                   'room_id': room_id,
                                    'config': config['config']})
     if response.status_code != 200:
         request_failed(response)

@@ -53,7 +53,7 @@ saiblo-dev-tools init
 
 ### ai
 
-AI 管理脚本。AI 以 `<tag>: <token>` 的形式存储在 ~/.saiblo-dev-tools/database.json 的 `ai` 字段下。`<tag>` 为人类友好的名称，`<token>` 用于在 Saiblo 数据库中唯一确定某个 AI.
+AI 管理脚本。AI 以 `<tag>: <token>` 的形式存储在 ~/.saiblo-dev-tools/database.json 的 `ai` 字段下。`<tag>` 为人类友好的名称，`<token>` 用于在 Saiblo 数据库中唯一确定某个 AI. `"human"` 保留给人类玩家，请勿使用。
 
 - ```shell
   -d, --delete <tag>
@@ -114,6 +114,8 @@ AI 管理脚本。AI 以 `<tag>: <token>` 的形式存储在 ~/.saiblo-dev-tools
       "game": number,  // <game_id>
   }
   ```
+
+  saiblo-dev-tools 现已支持启动人机、人人对战，你只需要将上述配置文件中原本填写 ai tag 的位置改为填写 `"human"`，即可在相应位置添加人类玩家。该脚本随后会输出人类玩家的 token.
 
 - ```shell
   -u, --upload <config_path>
