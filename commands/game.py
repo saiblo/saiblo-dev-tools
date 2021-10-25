@@ -48,8 +48,8 @@ def _test(config_path: str, result_dir: str) -> None:
                   ensure_ascii=False, indent=2)
         json.dump(data['info'], open(f'{result_dir}/info.json', 'w', encoding='utf-8'),
                   ensure_ascii=False, indent=2)
-        open(f'{result_dir}/replay{data["replay"]["type"]}', 'w', encoding='utf-8') \
-            .write(data['replay']['content'])
+        open(f'{result_dir}/replay{data["replay"]["type"]}', 'wb') \
+            .write(base64.standard_b64decode(data['replay']['content']))
         stdout.write(f'{data["status"]}\n')
 
 
