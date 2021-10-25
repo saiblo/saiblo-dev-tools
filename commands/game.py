@@ -48,8 +48,15 @@ def _test(config_path: str, result_dir: str) -> None:
                   ensure_ascii=False, indent=2)
         json.dump(data['info'], open(f'{result_dir}/info.json', 'w', encoding='utf-8'),
                   ensure_ascii=False, indent=2)
-        open(f'{result_dir}/replay{data["replay"]["type"]}', 'wb') \
-            .write(base64.standard_b64decode(data['replay']['content']))
+        try:
+            replay_uuid = data["replay_uuid"]
+            response = requests.get(f'{url}/admin/game/download-replay/{replay_uuid}/', cookies={'sessionid': cookie})
+            if response.status_code != 200:
+                raise response.status_code
+            with open(f'{result_dir}/replay{data["replay_type"]}', 'wb') as f:
+                f.write(response.content)
+        except Exception as e:
+            stderr.write(f'警告：下载回放文件失败。\n      {e}')
         stdout.write(f'{data["status"]}\n')
 
 
