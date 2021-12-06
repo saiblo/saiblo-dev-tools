@@ -4,26 +4,11 @@
 
 ## 配置
 
-安装依赖：
+安装本工具：
 
 ```shell
-pip3 install -r requirements.txt
+pip3 install saiblo-dev-tools
 ```
-
-入口文件为 main.py：
-
-```shell
-python3 main.py --help
-```
-
-为方便起见，可以考虑使用 [PyInstaller](https://www.pyinstaller.org/ "PyInstaller Quickstart") 打包成单个可执行文件：
-
-```shell
-pip3 install pyinstaller
-pyinstaller -F main.py
-```
-
-构建好的可执行文件在 dist/ 下。
 
 使用前请先执行：
 
