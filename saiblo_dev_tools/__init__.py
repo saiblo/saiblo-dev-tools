@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import os.path
 import sys
 from argparse import ArgumentParser, Namespace
@@ -44,7 +42,7 @@ def main(args: Namespace) -> None:
             raise RuntimeError(f'无法识别参数：`{args}`')
 
 
-if __name__ == '__main__':
+def entry_point():
     try:
         main(parser.parse_args(sys.argv[1:]))
     except Exception as exception:
